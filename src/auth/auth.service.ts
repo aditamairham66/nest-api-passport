@@ -6,7 +6,7 @@ import { Logger } from 'winston';
 import { LoginRequest, UserResponse } from './../model/auth.model';
 import { AuthValidation } from './auth.validation';
 import { JwtService } from '@nestjs/jwt';
-// import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -35,14 +35,14 @@ export class AuthService {
       throw new HttpException('Username is not found.', 401);
     }
 
-    // const isPasswordValid = await bcrypt.compare(
-    //   loginRequest.password,
-    //   user.password,
-    // );
+    const isPasswordValid = await bcrypt.compare(
+      loginRequest.password,
+      user.password,
+    );
 
-    // if (!isPasswordValid) {
-    //   throw new HttpException('Password is invalid', 401);
-    // }
+    if (!isPasswordValid) {
+      throw new HttpException('Password is invalid', 401);
+    }
 
     const payload = { id: user.id, username: user.name, email: user.email };
     return {

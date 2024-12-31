@@ -21,9 +21,7 @@ export class TokenController {
     try {
       const token = await this.tokenService.generateToken(authorization);
       return {
-        data: {
-          token: token,
-        },
+        data: token,
       };
     } catch (error) {
       throw new UnauthorizedException(error.message);
@@ -38,9 +36,7 @@ export class TokenController {
     try {
       const token = await this.tokenService.updateToken(authorization);
       return {
-        data: {
-          token: token,
-        },
+        data: token,
       };
     } catch (error) {
       throw new UnauthorizedException(error.message);

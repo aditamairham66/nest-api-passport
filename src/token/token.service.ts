@@ -1,6 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { GenerateResponse, UpdateResponse } from '../model/token.model';
 import { Logger } from 'winston';
 
 @Injectable()
@@ -10,7 +11,7 @@ export class TokenService {
     @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
   ) {}
 
-  async generateToken(authorizationHeader: string): Promise<string> {
+  async generateToken(authorizationHeader: string): Promise<GenerateResponse> {
     this.logger.debug(`token ${authorizationHeader}`);
 
     this.validateBasicAuth(authorizationHeader);
@@ -20,10 +21,10 @@ export class TokenService {
       access_api: username,
     };
 
-    return this.jwtService.sign(payload);
+    return this.responseToken(this.jwtService.sign(payload));
   }
 
-  async updateToken(authorizationHeader: string): Promise<string> {
+  async updateToken(authorizationHeader: string): Promise<UpdateResponse> {
     const token = this.extractBearerToken(authorizationHeader);
 
     // Verifikasi token lama
@@ -37,7 +38,7 @@ export class TokenService {
       expiresIn: process.env.JWT_EXPIRED_TIME,
     });
 
-    return newToken;
+    return this.responseToken(newToken);
   }
 
   private validateBasicAuth(authorizationHeader: string): void {
@@ -75,5 +76,11 @@ export class TokenService {
     );
     const [username] = credentials.split(':');
     return username;
+  }
+
+  private responseToken(token: string) {
+    return {
+      token: token,
+    };
   }
 }

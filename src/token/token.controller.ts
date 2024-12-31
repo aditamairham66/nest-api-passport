@@ -6,6 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { TokenService } from './token.service';
+import { WebResponse } from '../model/web.model';
+import { GenerateResponse, UpdateResponse } from '../model/token.model';
 
 @Controller('token')
 export class TokenController {
@@ -15,10 +17,14 @@ export class TokenController {
   @HttpCode(200)
   async generateToken(
     @Headers('authorization') authorization: string,
-  ): Promise<{ token: string }> {
+  ): Promise<WebResponse<GenerateResponse>> {
     try {
       const token = await this.tokenService.generateToken(authorization);
-      return { token };
+      return {
+        data: {
+          token: token,
+        },
+      };
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }
@@ -28,10 +34,14 @@ export class TokenController {
   @HttpCode(200)
   async updateToken(
     @Headers('authorization') authorization: string,
-  ): Promise<{ token: string }> {
+  ): Promise<WebResponse<UpdateResponse>> {
     try {
       const token = await this.tokenService.updateToken(authorization);
-      return { token };
+      return {
+        data: {
+          token: token,
+        },
+      };
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

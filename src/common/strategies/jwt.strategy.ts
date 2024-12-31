@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -14,6 +14,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'auth_jwt') {
   }
 
   async validate(payload: User) {
+    if (!payload.id) {
+      throw new UnauthorizedException('User must login first !');
+    }
+
     // Payload adalah data dalam token yang telah diverifikasi
     return {
       userId: payload.id,

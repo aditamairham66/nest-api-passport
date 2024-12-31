@@ -14,16 +14,18 @@ import { UserGuard } from './../common/guard/user.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/login')
+  @Post('login')
   @HttpCode(200)
   async getLogin(@Body() request: LoginRequest): Promise<UserResponse> {
     const login = await this.authService.login(request);
     return login;
   }
 
-  @Get('test')
+  @Get('logout')
   @UseGuards(UserGuard)
-  getTest() {
-    return 'test auth jwt';
+  @HttpCode(200)
+  async getLogout(): Promise<string> {
+    const token = this.authService.logout();
+    return token;
   }
 }

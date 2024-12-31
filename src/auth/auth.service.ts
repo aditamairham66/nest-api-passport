@@ -52,4 +52,9 @@ export class AuthService {
       token: this.jwtService.sign(payload),
     };
   }
+
+  async logout(): Promise<string> {
+    const payload = {};
+    return this.jwtService.sign(payload);
+  }
 }

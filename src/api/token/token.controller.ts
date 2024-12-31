@@ -11,7 +11,7 @@ import { TokenService } from './token.service';
 export class TokenController {
   constructor(private tokenService: TokenService) {}
 
-  @Get('generate')
+  @Get('/generate')
   @HttpCode(200)
   async generateToken(
     @Headers('authorization') authorization: string,
@@ -24,7 +24,7 @@ export class TokenController {
     }
   }
 
-  @Get('update')
+  @Get('/update')
   @HttpCode(200)
   async updateToken(
     @Headers('authorization') authorization: string,

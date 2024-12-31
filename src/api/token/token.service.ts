@@ -1,11 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class TokenService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    @Inject(WINSTON_MODULE_PROVIDER) private logger: Logger,
+  ) {}
 
   async generateToken(authorizationHeader: string): Promise<string> {
+    this.logger.debug(`token ${authorizationHeader}`);
+
     this.validateBasicAuth(authorizationHeader);
 
     const username = this.extractUsernameFromBasicAuth(authorizationHeader);

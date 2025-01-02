@@ -3,10 +3,11 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ZodError } from 'zod';
 
-@Catch(ZodError, HttpException)
+@Catch(ZodError, HttpException, UnauthorizedException)
 export class ErrorFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse();

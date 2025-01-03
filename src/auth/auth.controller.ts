@@ -7,7 +7,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginRequest, UserResponse } from '../model/auth.model';
+import {
+  LoginRequest,
+  UserResponse,
+  UserSignoutResponse,
+} from '../model/auth.model';
 import { UserGuard } from '../common/guard/user.guard';
 
 @Controller('auth')
@@ -24,7 +28,7 @@ export class AuthController {
   @Get('/logout')
   @UseGuards(UserGuard)
   @HttpCode(200)
-  async getLogout(): Promise<string> {
+  async getLogout(): Promise<UserSignoutResponse> {
     const token = this.authService.logout();
     return token;
   }

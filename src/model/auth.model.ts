@@ -9,3 +9,7 @@ export class UserResponse {
   email: string;
   token?: string;
 }
+
+export class UserSignoutResponse {
+  token?: string;
+}
